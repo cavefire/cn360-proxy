@@ -1,0 +1,8 @@
+.vscode
+logs/
+certs/
+python/__pycache__/
+pushkey.txt
+server_requests.txt
+data/
+product_id.txt

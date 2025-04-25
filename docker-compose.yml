@@ -1,0 +1,38 @@
+services:
+  mitmproxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./certs:/root/.mitmproxy
+      - ./logs:/root/logs
+      - ./data:/root/data
+      - ./pushkey.txt:/pushkey.txt
+      - ./product_id.txt:/product_id.txt
+    environment:
+      - LOCAL_PROXY_IP=192.168.0.254 # IP of this machine (accessible from robot)
+      - ROBOT_PORT=80 # Port on which the local server should listen for robot connection
+
+      - LOCAL_CONTROL_HOST=0.0.0.0 # Listen on this ip for control requests
+      - LOCAL_CONTROL_PORT=4468 # Listen on this port for control requests
+
+      - BLOCK_UPDATE=true # Block update requests of robot (recommended, so they can't patch this proxy out)
+
+      - CACHE_STATIC=true # Cache static files (recommended, so we don't have to download them every time)
+      - DATA_PATH=/root/data
+      - LOG_PATH=/root/logs
+
+      - MAP_INTV=1 # Interval in seconds for map updates from robot (cloud defaults to 5)
+      - PATH_INTV=1 # Interval in seconds for path updates from robot (cloud defaults to 5)
+      - STATUS_INTV=5 # Interval in seconds for status updates from robot (cloud defaults to 5)
+
+      - LOG_LEVEL_CRYPTO=INFO # Log level for crypto
+      - LOG_LEVEL_ECHO=INFO # Log level for Echo Server
+      - LOG_LEVEL_HTTP=INFO # Log level for http requests
+      - LOG_LEVEL_MITM=INFO # Log level for main python file
+      - LOG_LEVEL_PACKET=INFO # Log level for packet capture
+      - LOG_LEVEL_ROBOTSOCKETSERVER=INFO # Log level for RobotSocketServer
+      - LOG_LEVEL_LOCALCONTROLSOCKETSERVER=INFO # Log level for LocalControlSocketServer
+      - LOG_LEVEL_CLOUDSOCKET=INFO # Log level for CloudSocketServer
+
+    network_mode: host
