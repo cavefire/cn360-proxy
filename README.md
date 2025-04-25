@@ -31,6 +31,8 @@ Otherwise you can create a VLAN and set your server's ip as the default gateway.
 When thats done, create iptables rules like this:
 
 ```bash
+sysctl -w net.ipv4.ip_forward=1 >/dev/null
+
 iptables -t nat -A POSTROUTING -s "$ROBOT_IP" -o "$INTF" -j MASQUERADE
 iptables -t nat -A PREROUTING -s "$ROBOT_IP" -p tcp --dport 80  -j REDIRECT --to-port "$PROXY_PORT"
 iptables -t nat -A PREROUTING -s "$ROBOT_IP" -p tcp --dport 443 -j REDIRECT --to-port "$PROXY_PORT"
